@@ -44,7 +44,10 @@ namespace DDD.Sample.Entityes
         public static ProductInWarehouse GetProductsInWarehouse(this Repository<ProductInWarehouse> repository, 
             Product product, Warehouse warehouse)
         {
-            return repository.Get(new GetProductInWarehouse(product.CodeCatalog, warehouse.Code));
+            ProductInWarehouse productInWarehouse = repository.Get(new GetProductInWarehouse(product.CodeCatalog, warehouse.Code));
+            productInWarehouse.Product = product;
+            productInWarehouse.Warehouse = warehouse;
+            return productInWarehouse;
         }
     }
 }

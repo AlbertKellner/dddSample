@@ -36,9 +36,6 @@ namespace DDD.Sample.Services
                     throw new WarehouseNotFound(warehouseCode);
 
                 var productInWarehouse = warehousesProducts.GetProductsInWarehouse(product, warehouse);
-                productInWarehouse.Product = product;
-                productInWarehouse.Warehouse = warehouse;
-
                 return productInWarehouse;
             }
         }
