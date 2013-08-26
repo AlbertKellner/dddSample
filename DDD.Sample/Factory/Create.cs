@@ -17,7 +17,9 @@ namespace DDD.Sample.Factory
             using (var products = new Repository<Product>())
             {
                 if (products.AnyByCode(codeCatalog))
-                    throw new Exception(string.Format("Already a product with the code {0}", codeCatalog));
+                    throw new ProductSameCode(codeCatalog);
+                if (products.AnyByName(name))
+                    throw new ProductSameName(name);
 
                 var product = new Product
                                   {

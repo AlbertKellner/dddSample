@@ -13,7 +13,7 @@ namespace DDD.Sample.UnitTest
     public class InMemoryDatabase
     {
         public DateTime NowFake;
-        private static readonly ConcurrentDictionary<int, Context> Contexts = new ConcurrentDictionary<int, Context>();
+        private static readonly ConcurrentDictionary<string, Context> Contexts = new ConcurrentDictionary<string, Context>();
 
         enum Command
         {
@@ -29,9 +29,9 @@ namespace DDD.Sample.UnitTest
 
         static InMemoryDatabase()
         {
-            IoC.Register<IClock, IClock>(() => Contexts[Thread.CurrentThread.ManagedThreadId].Clock);
-            IoC.Register<IUnitOfWork, IUnitOfWork>(() => Contexts[Thread.CurrentThread.ManagedThreadId].UnitOfWork);
-            IoC.Register<IQuery, IQuery>(() => Contexts[Thread.CurrentThread.ManagedThreadId].Query);
+            IoC.Register<IClock, IClock>(() => Contexts[Thread.CurrentPrincipal.Identity.Name].Clock);
+            IoC.Register<IUnitOfWork, IUnitOfWork>(() => Contexts[Thread.CurrentPrincipal.Identity.Name].UnitOfWork);
+            IoC.Register<IQuery, IQuery>(() => Contexts[Thread.CurrentPrincipal.Identity.Name].Query);
         }
 
         public InMemoryDatabase(DateTime now, params Assembly[] assemblies)
@@ -46,8 +46,8 @@ namespace DDD.Sample.UnitTest
             NowFake = now;
             clock.Expect(c => c.GetNow()).WhenCalled(_ => _.ReturnValue = NowFake).Return(default(DateTime));
             unitOfWork.Expect(u => u.Dispose()).WhenCalled(a => UnitOfWorkManager.Unregister());
-            
-            Contexts.TryAdd(Thread.CurrentThread.ManagedThreadId,
+
+            Contexts.TryAdd(Thread.CurrentPrincipal.Identity.Name,
                 new Context
                     {
                         Clock = clock,
@@ -111,7 +111,7 @@ namespace DDD.Sample.UnitTest
                 .Return(false);
         }
 
-        private static void Get<TEntity>(MethodInvocation method,
+        private void Get<TEntity>(MethodInvocation method,
             IEnumerable<TEntity> database)
         {
             var specification = (Specification<TEntity>)method.Arguments[0];
@@ -119,7 +119,7 @@ namespace DDD.Sample.UnitTest
             method.ReturnValue = database.SingleOrDefault(query);
         }
 
-        private static void GetBySpecification<TEntity>(MethodInvocation method,
+        private void GetBySpecification<TEntity>(MethodInvocation method,
             IEnumerable<TEntity> database)
         {
             var specification = (Specification<TEntity>)method.Arguments[0];
@@ -127,7 +127,7 @@ namespace DDD.Sample.UnitTest
             method.ReturnValue = database.Where(query).AsQueryable();
         }
 
-        private static void Any<TEntity>(MethodInvocation method,
+        private void Any<TEntity>(MethodInvocation method,
             IEnumerable<TEntity> database)
         {
             var specification = (Specification<TEntity>)method.Arguments[0];
@@ -135,7 +135,7 @@ namespace DDD.Sample.UnitTest
             method.ReturnValue = database.Any(query);
         }
 
-        private static void Insert<TEntity>(MethodInvocation method, 
+        private void Insert<TEntity>(MethodInvocation method, 
             ICollection<KeyValuePair<Command, TEntity>> registerCommands,
             ICollection<TEntity> database)
         {
@@ -144,14 +144,14 @@ namespace DDD.Sample.UnitTest
             database.Add(entity);
         }
 
-        private static void Update<TEntity>(MethodInvocation method,
+        private void Update<TEntity>(MethodInvocation method,
             ICollection<KeyValuePair<Command, TEntity>> registerCommands)
         {
             var entity = (TEntity)method.Arguments[0];
             registerCommands.Add(new KeyValuePair<Command, TEntity>(Command.Update, entity));
         }
 
-        private static void Delete<TEntity>(MethodInvocation method,
+        private void Delete<TEntity>(MethodInvocation method,
             ICollection<KeyValuePair<Command, TEntity>> registerCommands,
             ICollection<TEntity> database)
         {
@@ -160,12 +160,12 @@ namespace DDD.Sample.UnitTest
             database.Remove(entity);
         }
 
-        private static void Commit<TEntity>(ICollection<KeyValuePair<Command, TEntity>> registerCommands)
+        private void Commit<TEntity>(ICollection<KeyValuePair<Command, TEntity>> registerCommands)
         {
             registerCommands.Clear();
         }
 
-        private static void Rollback<TEntity>(
+        private void Rollback<TEntity>(
             IEnumerable<KeyValuePair<Command, TEntity>> registerCommands,
             ICollection<TEntity> database)
         {

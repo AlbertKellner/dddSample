@@ -3,7 +3,7 @@
 namespace DDD.Sample.Entityes
 {
     /// <summary>
-    /// Produto
+    /// Produto não encontrado  
     /// </summary>
     public class ProductNotFound : Exception 
     {
@@ -12,6 +12,29 @@ namespace DDD.Sample.Entityes
         {
             
         }
+    }
 
+    /// <summary>
+    /// Produto com mesmo código
+    /// </summary>
+    public class ProductSameCode : Exception
+    {
+        public ProductSameCode(string codeCatalog)
+            : base(string.Format("Already a product with the code {0}", codeCatalog))
+        {
+
+        }
+    }
+
+    /// <summary>
+    /// Produto com mesmo nome
+    /// </summary>
+    public class ProductSameName : Exception
+    {
+        public ProductSameName(string name)
+            : base(string.Format("Already a product with the name {0}", name))
+        {
+
+        }
     }
 }

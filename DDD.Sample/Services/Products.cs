@@ -31,12 +31,10 @@ namespace DDD.Sample.Services
                 {
                     //Obtem informações do fornecedor e depósito de entrada do produto
                     var supplier = suppliers.GetSupplierByCode(supplierCode);
-
                     if (supplier == null)
                         throw new SupplierNotFound(supplierCode);
 
                     var warehouse = warehouses.GetDefaultWarehouse();
-
                     if (warehouse == null)
                         throw new DefaultWarehouseNotFound();
 
@@ -87,8 +85,16 @@ namespace DDD.Sample.Services
                 {
                     //Obtem informações do fornecedor e depósito de entrada do produto
                     var supplier = suppliers.GetSupplierByCode(supplierCode);
+                    if (supplier == null)
+                        throw new SupplierNotFound(supplierCode);
+
                     var warehouse = warehouses.GetDefaultWarehouse();
+                    if (warehouse == null)
+                        throw new DefaultWarehouseNotFound();
+
                     var product = products.GetByCode(productCatalogCode);
+                    if (product == null)
+                        throw new ProductNotFound(productCatalogCode);
 
                     //Cria um registro de compras do produto
                     var purchase = product.PurchaseFrom(supplier, price, quantity);
@@ -134,7 +140,7 @@ namespace DDD.Sample.Services
                 // Obtém o produto pelo código
                 var product = products.GetByCode(productCatalogCode);
                 if (product == null)
-                    throw new ArgumentException("Product not found");
+                    throw new ProductNotFound(productCatalogCode);
 
                 // Atualiza a informação de ultima compra
                 product.LastPurchase = Helper.AsLazy(() => purchases.GetLastPurchasesByProduct(product)); 
@@ -157,9 +163,12 @@ namespace DDD.Sample.Services
                     // Obtém o produto pelo código
                     var product = products.GetByCode(productCatalogCode);
                     if (product == null)
-                        throw new ArgumentException("Product not found.");
+                        throw new ProductNotFound(productCatalogCode);
+                    // Nada a fazer
                     if (product.Name == newName)
-                        throw new ArgumentException("New name is the same at last name.");
+                        return;
+                    if (products.AnyByName(newName))
+                        throw new ProductSameName(newName);
 
                     product.Name = newName;
                     products.Update(product);
