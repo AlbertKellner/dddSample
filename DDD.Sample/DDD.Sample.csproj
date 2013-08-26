@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7CAA2C97-61DC-4BBA-BD45-A3AA3DDE5B24}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DDD.Sample</RootNamespace>
+    <AssemblyName>DDD.Sample</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entityes\Product.Exceptions.cs" />
+    <Compile Include="Entityes\ProductInWarehouse.Specs.cs" />
+    <Compile Include="Entityes\Warehouse.Exceptions.cs" />
+    <Compile Include="Entityes\Supplier.Exceptions.cs" />
+    <Compile Include="Entityes\Entity.cs" />
+    <Compile Include="Entityes\Product.cs" />
+    <Compile Include="Entityes\ProductInWarehouse.cs" />
+    <Compile Include="Entityes\Purchase.cs" />
+    <Compile Include="Entityes\Supplier.cs" />
+    <Compile Include="Entityes\SystemParameters.cs" />
+    <Compile Include="Entityes\Warehouse.cs" />
+    <Compile Include="Factory\Create.cs" />
+    <Compile Include="Foundation\Helper.cs" />
+    <Compile Include="Foundation\IClock.cs" />
+    <Compile Include="Foundation\IoC.cs" />
+    <Compile Include="Foundation\IQuery.cs" />
+    <Compile Include="Foundation\IUnitOfWork.cs" />
+    <Compile Include="Foundation\Repository.cs" />
+    <Compile Include="Foundation\Specification.cs" />
+    <Compile Include="Foundation\UnitOfWorkManager.cs" />
+    <Compile Include="Foundation\UserIdentity.cs" />
+    <Compile Include="Foundation\UserPrincipal.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Products.cs" />
+    <Compile Include="Entityes\Product.Specs.cs" />
+    <Compile Include="Entityes\Purchase.Specs.cs" />
+    <Compile Include="Entityes\Warehouse.Specs.cs" />
+    <Compile Include="Entityes\Supplier.Specs.cs" />
+    <Compile Include="Entityes\SystemParameters.Specs.cs" />
+    <Compile Include="Services\Stock.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
